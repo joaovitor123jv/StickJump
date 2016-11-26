@@ -65,11 +65,7 @@ Screen::Screen(std::string title, int width, int height)
 	this->height = height;
 	this->title = title;
 	this->showWindow = true;
-	if(this->upgrade())
-	{
-		cout<<"Window created with success"<<endl;
-	}
-	else
+	if(!this->upgrade())
 	{
 		cout<<"On: Screen constructor"<<endl;
 		cout<<"\tERROR: Failed to initialize window"<<endl;
@@ -85,18 +81,11 @@ Screen::~Screen(void)
 	{
 		SDL_DestroyRenderer(this->renderer);
 		this->renderer = NULL;
-		cout<<"Renderizador destruído"<<endl;
 	}
 	if(this->window != NULL)
 	{
-		cout<<"Destruindo janela"<<endl;
 		SDL_DestroyWindow(this->window);
 		this->window= NULL;
-		cout<<"Janela Destruída"<<endl;
-	}
-	if(!this->title.empty())
-	{
-		cout<<"Colocar destrutor de string aqui "<<endl;
 	}
 }
 
