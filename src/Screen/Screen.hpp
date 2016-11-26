@@ -56,6 +56,7 @@ public:
 	SDL_Keycode getKey();
 	bool getExit();
 	SDL_Renderer* getRenderer();
+	SDL_Window* getWindow();
 
 	//Commands
 	bool upgrade();

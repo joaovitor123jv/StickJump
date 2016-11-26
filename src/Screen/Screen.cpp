@@ -156,6 +156,7 @@ bool Screen::update()
 		return false;
 	}
 	SDL_RenderPresent(this->renderer);
+	SDL_RenderClear(this->renderer);
 	return true;
 }
 
@@ -350,3 +351,8 @@ bool Screen::getKeyUp()
 SDL_Keycode Screen::getKey() { return this->event.key.keysym.sym; }
 
 bool Screen::getExit(){ if(this->event.type == SDL_QUIT){ return true;} return false; }
+
+SDL_Window* Screen::getWindow()
+{
+	return this->window;
+}
