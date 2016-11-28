@@ -12,6 +12,7 @@ private:
 	Screen* screen;
 	SDL_Rect position;
 	SDL_Rect resized;
+	SDL_Rect crop;
 	SDL_Texture* texture;
 	string path;
 	bool showLogs;
@@ -34,6 +35,7 @@ public:
 	void setPosition(int x, int y);
 	void setSize(int w, int h);
 	void setScreen(Screen* screen);
+	void setCrop(int x, int y, int w, int h);
 	//Loaders
 	bool loadImage(string path);
 	//Commands

@@ -87,6 +87,7 @@ Screen::~Screen(void)
 		SDL_DestroyWindow(this->window);
 		this->window= NULL;
 	}
+	SDL_Quit();
 }
 
 //Commands

@@ -37,6 +37,8 @@ void Image::getImageDimensions(SDL_Surface* surface)
 	this->position.h = surface->h;
 	this->resized.w = surface->w;
 	this->resized.h = surface->h;
+	this->crop.w = surface->w;
+	this->crop.h = surface->h;
 }
 
 int Image::getX() { return this->position.x; }
@@ -60,14 +62,33 @@ void Image::setDefaultValues()
 	this->resized.y = 0;
 	this->resized.w = 0;
 	this->resized.h = 0;
+	this->crop.x = 0;
+	this->crop.y = 0;
+	this->crop.w = 0;
+	this->crop.h = 0;
 }
 
 void Image::setLogs(bool showLogs) { this->showLogs = showLogs; }
-void Image::setPosition(int x, int y) { this->position.x = x; this->position.y = y; this->resized.x=x; this->resized.y=y; }
+void Image::setPosition(int x, int y) 
+{
+	this->position.x = x;
+	this->position.y = y; 
+	this->resized.x=x; 
+	this->resized.y=y;
+//	this->crop.x = x;
+//	this->crop.y = y;
+}
 void Image::setSize(int w, int h)
 {
 	this->resized.w = w;
 	this->resized.h = h;
+}
+void Image::setCrop(int x, int y, int w, int h)
+{
+	this->crop.x = x;
+	this->crop.y = y;
+	this->crop.w = w;
+	this->crop.h = h;
 }
 void Image::setScreen(Screen* screen) { this->screen = screen; }
 
@@ -177,7 +198,7 @@ void Image::print()
 		}
 		return;
 	}
-	SDL_RenderCopy(this->screen->getRenderer(), this->texture, &this->position, &this->resized);
+	SDL_RenderCopy(this->screen->getRenderer(), this->texture, &this->crop, &this->resized);
 }
 
 void Image::toString()
@@ -187,4 +208,8 @@ void Image::toString()
 	cout<<"\t Y = "<<this->getY()<<endl;
 	cout<<"\t Width = "<<this->getWidth()<<endl;
 	cout<<"\t Height = "<<this->getHeight()<<endl;
+	cout<<"\t Crop X = "<<this->crop.x<<endl;
+	cout<<"\t Crop Y = "<<this->crop.y<<endl;
+	cout<<"\t Crop Width = "<<this->crop.w<<endl;
+	cout<<"\t Crop Height = "<<this->crop.h<<endl;
 }

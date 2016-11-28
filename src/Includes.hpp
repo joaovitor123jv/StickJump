@@ -7,3 +7,4 @@
 #include"Text/Text.hpp"
 #include"Button/Button.hpp"
 #include"Image/Image.hpp"
+#include"Animation/Animation.hpp"

@@ -69,7 +69,7 @@ void Button::setClickColor()
 }
 
 //Commands
-void Button::listener()
+bool Button::listener()
 {
 	if(this->screen == NULL)
 	{
@@ -78,40 +78,41 @@ void Button::listener()
 			cout<<"On: Button listener()"<<endl;
 			cout<<"\tERROR: screen to listen, not specified yet, aborting"<<endl;
 		}
-		return;
+		return false;
 	}
 	int x, y;
 	this->screen->getCursorPosition(&x,&y);
 	if(x < this->rectangle.getX())
 	{
 		this->setOutsideColor();
-		return;
+		return false;
 	}
 	if(x > this->rectangle.getX()+this->rectangle.getWidth())
 	{
 		this->setOutsideColor();
-		return;
+		return false;
 	}
 	if(y < this->rectangle.getY())
 	{
 		this->setOutsideColor();
-		return;
+		return false;
 	}
 	if(y > this->rectangle.getY()+this->rectangle.getHeight())
 	{
 		this->setOutsideColor();
-		return;
+		return false;
 	}
 	if(!this->screen->getMouseButtonDown())
 	{
 		this->setInsideColor();
-		return;
+		return false;
 	}
 	if(this->screen->getMouseButtonDown())
 	{
 		this->setClickColor();
-		return;
+		return true;
 	}
+	return false;
 }
 
 void Button::print()

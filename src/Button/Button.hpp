@@ -33,6 +33,6 @@ public:
 	void setLogs(bool showLogs);
 
 	//Commands
-	void listener();
+	bool listener();
 	void print();
 };
