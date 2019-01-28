@@ -1,8 +1,8 @@
 #pragma once
-#include<SDL2/SDL.h>
-#include"../Rectangle/Rectangle.hpp"
-#include"../Screen/Screen.hpp"
-#include"../Text/Text.hpp"
+#include <SDL2/SDL.h>
+#include "../Rectangle/Rectangle.hpp"
+#include "../Window/Window.hpp"
+#include "../Text/Text.hpp"
 
 class Button
 {
@@ -12,25 +12,46 @@ private:
 	SDL_Color outsideColor;
 	SDL_Color insideColor;
 	SDL_Color clickColor;
-	Screen* screen;
+	Window* window;
 	bool showLogs;
+
+	static unsigned int defaultBorderSize;
+	unsigned int borderSize;
 
 	void setDefaultValues();
 	void setInsideColor();
 	void setOutsideColor();
 	void setClickColor();
+
 public:
-	//Constructor
+	//Constructors
 	Button();
+	Button(std::string text);
 	//Destructor
-	~Button();
+	// ~Button();
+
+	//Getters
+	int getWidth();
+	int getHeight();
 
 	//Setters
-	void setScreen(Screen* screen);
+	void setWindow(Window* window);
 	void setText(string text);
 	void setSize(int size);
 	void setPosition(int x, int y);
 	void setLogs(bool showLogs);
+
+	void setInsideColor(int r, int g, int b);
+	void setOutsideColor(int r, int g, int b);
+	void setClickColor(int r, int g, int b);
+	void setTextColor(int r, int g, int b);
+
+	void setInsideColor(SDL_Color color);
+	void setOutsideColor(SDL_Color color);
+	void setClickColor(SDL_Color color);
+	void setTextColor(SDL_Color color);
+
+	void setDefaultBorderSize(unsigned int size);
 
 	//Commands
 	bool listener();

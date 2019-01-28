@@ -1,6 +1,6 @@
-#include<SDL2/SDL_ttf.h>
-#include"Text.hpp"
+#include "Text.hpp"
 
+string Text::defaultFontPath = "./font/default.ttf";
 
 //Constructors
 Text::Text()
@@ -12,6 +12,19 @@ Text::Text()
 		return;
 	}
 	this->setDefaultValues();
+}
+
+
+Text::Text(string path)
+{
+	if(TTF_Init() == -1)
+	{
+		cout<<"On: Text Constructor"<<endl;
+		cout<<"\tFailed to init TTF support, aborting"<<endl;
+		return;
+	}
+	this->setDefaultValues();
+	this->path = path;
 }
 
 //Destructor
@@ -51,11 +64,21 @@ void Text::getValuesFromSurface(SDL_Surface* surface)
 	return;
 }
 
+bool Text::getWindowDefined()
+{
+	if(this->window == NULL)
+	{
+		return false;
+	}
+	return true;
+}
+
 //Setters
 void Text::setDefaultValues()
 {
-	this->text = "";
-	this->path = "";
+	this->text = "Text";
+	// this->path = "font/default.ttf";
+	this->path = Text::defaultFontPath;
 	this->color.r = 0;
 	this->color.g = 0;
 	this->color.b = 0;
@@ -67,22 +90,31 @@ void Text::setDefaultValues()
 	this->position.h = 0;
 	this->texture = NULL;
 	this->font = NULL;
-	this->fontSize = 12;
-	this->screen = NULL;
+	this->fontSize = 32;
+	this->window = NULL;
 	this->showLogs = false;
+	this->visible = true;
 }
+
+void Text::setDefaultFontPath(string path) { if(! path.empty()) Text::defaultFontPath = path; }
 
 //void Text::setMaxSize(int maxSize) { this->maxSize = maxSize; }
 void Text::setText(string text) 
 {
 	this->text = text;
-	if(this->screen != NULL) this->update();
+	if(this->window != NULL) this->update();
 }
 void Text::setLogs(bool showLogs){ this->showLogs = showLogs; }
 void Text::setColor(SDL_Color color) 
 { 
 	this->color = color; 
-	if(this->screen != NULL) this->update();
+	if(this->window != NULL) this->update();
+}
+
+
+void Text::setVisible(bool option)
+{
+	this->visible = option;
 }
 
 void Text::setFont(string path, int fontSize)
@@ -103,7 +135,7 @@ void Text::setFont(string path, int fontSize)
 		cout<<"On: Text setFont(string path, int fontSize)"<<endl;
 		cout<<"\tERROR: Couldn't load font"<<endl;
 	}
-	if(this->screen != NULL) this->update();
+	if(this->window != NULL) this->update();
 	return;
 }
 
@@ -125,7 +157,7 @@ void Text::setFont(string path)
 		cout<<"On: Text setFont(string path)"<<endl;
 		cout<<"\tERROR: Couldn't load font"<<endl;
 	}
-	if(this->screen != NULL) this->update();
+	if(this->window != NULL) this->update();
 	return;
 }
 
@@ -147,24 +179,24 @@ void Text::setFontSize(int fontSize)
 		cout<<"On: Text setFontSize(int fontSize)"<<endl;
 		cout<<"\tERROR: Couldn't load font"<<endl;
 	}
-	if(this->screen != NULL) this->update();
+	if(this->window != NULL) this->update();
 	return;
 }
 
 
 
-void Text::setScreen(Screen *screen)
+void Text::setWindow(Window *window)
 {
-	if(screen == NULL)
+	if(window == NULL)
 	{
 		if(this->showLogs)
 		{
-			cout<<"On: Text setScreen(Screen*)"<<endl;
-			cout<<"\tERROR: Screen* == NULL\n, aborting"<<endl;
+			cout<<"On: Text setWindow(Window*)"<<endl;
+			cout<<"\tERROR: Window* == NULL\n, aborting"<<endl;
 		}
 		return;
 	}
-	this->screen = screen;
+	this->window = window;
 }
 
 void Text::setPosition(int x, int y) { this->position.x = x; this->position.y = y; }
@@ -174,12 +206,12 @@ void Text::setY(int y) { this->position.y = y; }
 //Commands
 void Text::update()
 {
-	if(this->screen == NULL)
+	if(this->window == NULL)
 	{
 		if(this->showLogs)
 		{
 			cout<<"On: Text update()"<<endl;
-			cout<<"\tERROR: Screen to render text isn't defined yet, aborting"<<endl;
+			cout<<"\tERROR: Window to render text isn't defined yet, aborting"<<endl;
 		}
 		return;
 	}
@@ -210,7 +242,7 @@ void Text::update()
 		SDL_DestroyTexture(this->texture);
 		this->texture = NULL;
 	}
-	this->texture = SDL_CreateTextureFromSurface(this->screen->getRenderer(), surface);
+	this->texture = SDL_CreateTextureFromSurface(this->window->getRenderer(), surface);
 	if(this->texture == NULL)
 	{
 		if(this->showLogs)
@@ -230,14 +262,19 @@ void Text::update()
 
 void Text::print()
 {
-	if(this->screen == NULL)
+	if(this->window == NULL)
 	{
 		if(this->showLogs)
 		{
 			cout<<"On: Text print()"<<endl;
-			cout<<"\tERROR: Screen to print text not defined yet"<<endl;
+			cout<<"\tERROR: Window to print text not defined yet"<<endl;
 		}
 		return;
 	}
-	SDL_RenderCopy(this->screen->getRenderer(), this->texture, NULL, &this->position);
+	if( !this->visible )
+	{
+		return;
+	}
+	SDL_RenderCopy(this->window->getRenderer(), this->texture, NULL, &this->position);
+	return;
 }
